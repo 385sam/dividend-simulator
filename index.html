@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dividend Capital Simulator</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0c0f;
+    --surface: #111418;
+    --surface2: #181c22;
+    --border: #1e2530;
+    --gold: #c9a84c;
+    --gold-dim: #8a6d2f;
+    --gold-glow: rgba(201,168,76,0.15);
+    --green: #3dba7a;
+    --green-dim: rgba(61,186,122,0.15);
+    --red: #e05555;
+    --text: #e8e2d6;
+    --text-dim: #6b7280;
+    --text-mid: #9ca3af;
+    --radius: 12px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    min-height: 100vh;
+    padding: 40px 20px 80px;
+    overflow-x: hidden;
+  }
+
+  /* Background grain */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none; z-index: 0; opacity: 0.6;
+  }
+
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+    position: relative; z-index: 1;
+  }
+
+  /* Header */
+  header {
+    text-align: center;
+    margin-bottom: 60px;
+    animation: fadeDown 0.8s ease both;
+  }
+
+  .eyebrow {
+    font-size: 10px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 16px;
+    opacity: 0.8;
+  }
+
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(36px, 6vw, 64px);
+    font-weight: 900;
+    line-height: 1.05;
+    color: var(--text);
+    margin-bottom: 16px;
+  }
+
+  h1 span {
+    color: var(--gold);
+    font-style: italic;
+  }
+
+  .subtitle {
+    font-size: 12px;
+    color: var(--text-dim);
+    letter-spacing: 1px;
+  }
+
+  /* Gold divider */
+  .divider {
+    width: 60px; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    margin: 24px auto;
+  }
+
+  /* Card */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 36px;
+    margin-bottom: 24px;
+    animation: fadeUp 0.6s ease both;
+  }
+
+  .card-title {
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 28px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .card-title::after {
+    content: ''; flex: 1; height: 1px;
+    background: var(--border);
+  }
+
+  /* Grid */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
+
+  @media (max-width: 600px) {
+    .grid-2, .grid-3 { grid-template-columns: 1fr; }
+  }
+
+  /* Input group */
+  .input-group {
+    display: flex; flex-direction: column; gap: 8px;
+  }
+
+  label {
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+
+  .input-wrapper {
+    position: relative;
+  }
+
+  .input-prefix {
+    position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+    font-size: 13px; color: var(--gold); opacity: 0.7;
+    pointer-events: none;
+  }
+
+  input[type="number"], input[type="range"] {
+    width: 100%;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    font-size: 14px;
+    padding: 12px 14px 12px 32px;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    -moz-appearance: textfield;
+  }
+
+  input[type="number"]::-webkit-outer-spin-button,
+  input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; }
+
+  input[type="number"]:focus {
+    border-color: var(--gold-dim);
+    box-shadow: 0 0 0 3px var(--gold-glow);
+  }
+
+  /* Slider */
+  .slider-group { display: flex; flex-direction: column; gap: 8px; }
+  .slider-row { display: flex; justify-content: space-between; align-items: center; }
+  .slider-value {
+    font-size: 13px; color: var(--gold);
+    min-width: 50px; text-align: right;
+  }
+
+  input[type="range"] {
+    padding: 0; height: 4px; cursor: pointer;
+    -webkit-appearance: none; appearance: none;
+    background: var(--border); border: none; border-radius: 2px;
+  }
+
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 16px; height: 16px;
+    background: var(--gold);
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 0 8px var(--gold-glow);
+    transition: box-shadow 0.2s;
+  }
+
+  input[type="range"]::-webkit-slider-thumb:hover {
+    box-shadow: 0 0 16px var(--gold-glow);
+  }
+
+  /* Simulate button */
+  .btn-simulate {
+    width: 100%;
+    padding: 18px;
+    background: transparent;
+    border: 1px solid var(--gold);
+    border-radius: var(--radius);
+    color: var(--gold);
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s;
+    position: relative; overflow: hidden;
+    margin-top: 8px;
+  }
+
+  .btn-simulate::before {
+    content: ''; position: absolute; inset: 0;
+    background: var(--gold);
+    transform: scaleX(0); transform-origin: left;
+    transition: transform 0.3s ease;
+    z-index: -1;
+  }
+
+  .btn-simulate:hover {
+    color: var(--bg);
+    box-shadow: 0 0 30px var(--gold-glow);
+  }
+
+  .btn-simulate:hover::before { transform: scaleX(1); }
+  .btn-simulate:disabled { opacity: 0.4; cursor: not-allowed; }
+  .btn-simulate:disabled::before { transform: scaleX(0); }
+
+  /* Loading */
+  .loading {
+    display: none;
+    text-align: center;
+    padding: 40px;
+    color: var(--text-dim);
+    font-size: 11px;
+    letter-spacing: 3px;
+  }
+
+  .spinner {
+    width: 32px; height: 32px;
+    border: 2px solid var(--border);
+    border-top-color: var(--gold);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin: 0 auto 16px;
+  }
+
+  /* Results */
+  #results { display: none; }
+
+  .result-hero {
+    text-align: center;
+    padding: 40px 20px;
+    background: var(--surface2);
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    margin-bottom: 24px;
+    position: relative; overflow: hidden;
+    animation: fadeUp 0.4s ease both;
+  }
+
+  .result-hero::before {
+    content: '';
+    position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+    width: 200px; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+
+  .result-label {
+    font-size: 10px; letter-spacing: 3px; text-transform: uppercase;
+    color: var(--text-dim); margin-bottom: 12px;
+  }
+
+  .result-capital {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(40px, 8vw, 72px);
+    font-weight: 700;
+    color: var(--gold);
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+
+  .result-caption {
+    font-size: 11px; color: var(--text-dim); letter-spacing: 1px;
+  }
+
+  /* Stats row */
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+
+  @media (max-width: 600px) {
+    .stats-row { grid-template-columns: 1fr 1fr; }
+  }
+
+  .stat-box {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px;
+    text-align: center;
+    animation: fadeUp 0.5s ease both;
+  }
+
+  .stat-label {
+    font-size: 9px; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--text-dim); margin-bottom: 8px;
+  }
+
+  .stat-value {
+    font-size: 15px; color: var(--text); font-weight: 500;
+  }
+
+  .stat-value.green { color: var(--green); }
+  .stat-value.red { color: var(--red); }
+
+  /* Distribution chart */
+  .chart-container {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+    margin-bottom: 24px;
+    animation: fadeUp 0.6s ease both;
+  }
+
+  canvas { width: 100% !important; }
+
+  /* Scenarios */
+  .scenarios-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+
+  @media (max-width: 600px) {
+    .scenarios-grid { grid-template-columns: 1fr; }
+  }
+
+  .scenario-card {
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+    border: 1px solid;
+    animation: fadeUp 0.7s ease both;
+  }
+
+  .scenario-card.pessimistic {
+    background: rgba(224,85,85,0.05);
+    border-color: rgba(224,85,85,0.2);
+  }
+
+  .scenario-card.base {
+    background: var(--gold-glow);
+    border-color: rgba(201,168,76,0.3);
+  }
+
+  .scenario-card.optimistic {
+    background: var(--green-dim);
+    border-color: rgba(61,186,122,0.2);
+  }
+
+  .scenario-name {
+    font-size: 9px; letter-spacing: 3px; text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .pessimistic .scenario-name { color: var(--red); }
+  .base .scenario-name { color: var(--gold); }
+  .optimistic .scenario-name { color: var(--green); }
+
+  .scenario-capital {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px; font-weight: 700;
+    color: var(--text); margin-bottom: 4px;
+  }
+
+  .scenario-desc {
+    font-size: 10px; color: var(--text-dim); letter-spacing: 1px;
+  }
+
+  /* Note */
+  .note {
+    font-size: 10px; color: var(--text-dim);
+    text-align: center; letter-spacing: 1px;
+    line-height: 1.6;
+    padding: 16px;
+    border-top: 1px solid var(--border);
+    margin-top: 8px;
+  }
+
+  /* Animations */
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  .card:nth-child(2) { animation-delay: 0.1s; }
+  .card:nth-child(3) { animation-delay: 0.2s; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <header>
+    <p class="eyebrow">Monte Carlo · Dividend Simulator</p>
+    <h1>How much capital<br>do you need to <span>live off dividends?</span></h1>
+    <div class="divider"></div>
+    <p class="subtitle">Enter your desired monthly income — the simulator calculates the capital you need</p>
+  </header>
+
+  <!-- OBIETTIVO -->
+  <div class="card">
+    <p class="card-title">Income target</p>
+    <div class="grid-2">
+      <div class="input-group">
+        <label>Desired monthly net income</label>
+        <div class="input-wrapper">
+          <span class="input-prefix">€</span>
+          <input type="number" id="targetIncome" value="2000" min="100" step="100">
+        </div>
+      </div>
+      <div class="input-group">
+        <label>Time horizon (years)</label>
+        <div class="input-wrapper">
+          <span class="input-prefix">#</span>
+          <input type="number" id="years" value="10" min="1" max="40">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PARAMETRI DIVIDENDO -->
+  <div class="card">
+    <p class="card-title">Dividend parameters</p>
+    <div class="grid-3" style="margin-bottom:24px">
+      <div class="slider-group">
+        <div class="slider-row">
+          <label>Dividend Yield</label>
+          <span class="slider-value" id="yieldVal">4.0%</span>
+        </div>
+        <input type="range" id="divYield" min="1" max="12" step="0.1" value="4">
+      </div>
+      <div class="slider-group">
+        <div class="slider-row">
+          <label>Annual growth</label>
+          <span class="slider-value" id="growthVal">5.0%</span>
+        </div>
+        <input type="range" id="divGrowth" min="0" max="20" step="0.5" value="5">
+      </div>
+      <div class="slider-group">
+        <div class="slider-row">
+          <label>Tax rate</label>
+          <span class="slider-value" id="taxVal">26.0%</span>
+        </div>
+        <input type="range" id="taxRate" min="0" max="50" step="1" value="26">
+      </div>
+    </div>
+    <div class="grid-2">
+      <div class="slider-group">
+        <div class="slider-row">
+          <label>Growth volatility (risk)</label>
+          <span class="slider-value" id="volVal">2.0%</span>
+        </div>
+        <input type="range" id="volatility" min="0" max="15" step="0.5" value="2">
+      </div>
+      <div class="slider-group">
+        <div class="slider-row">
+          <label>Monte Carlo simulations</label>
+          <span class="slider-value" id="simVal">5,000</span>
+        </div>
+        <input type="range" id="simulations" min="1000" max="20000" step="1000" value="5000">
+      </div>
+    </div>
+  </div>
+
+  <!-- BUTTON -->
+  <div class="card" style="padding:24px">
+    <button class="btn-simulate" id="btnSimulate" onclick="runSimulation()">
+      ▶ Run simulation
+    </button>
+  </div>
+
+  <!-- LOADING -->
+  <div class="loading" id="loading">
+    <div class="spinner"></div>
+    <p>Running Monte Carlo...</p>
+  </div>
+
+  <!-- RESULTS -->
+  <div id="results">
+
+    <div class="result-hero">
+      <p class="result-label">Estimated required capital (base scenario)</p>
+      <div class="result-capital" id="capitalResult">—</div>
+      <p class="result-caption" id="capitalCaption">to generate <span id="incomeRef">—</span> net/month</p>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat-box">
+        <p class="stat-label">Gross annual yield</p>
+        <div class="stat-value" id="statYieldAnn">—</div>
+      </div>
+      <div class="stat-box">
+        <p class="stat-label">Estimated net yield</p>
+        <div class="stat-value green" id="statYieldNet">—</div>
+      </div>
+      <div class="stat-box">
+        <p class="stat-label">Estimated annual taxes</p>
+        <div class="stat-value red" id="statTax">—</div>
+      </div>
+      <div class="stat-box">
+        <p class="stat-label">Annual net income</p>
+        <div class="stat-value" id="statAnnInc">—</div>
+      </div>
+    </div>
+
+    <div class="scenarios-grid">
+      <div class="scenario-card pessimistic">
+        <p class="scenario-name">⬇ Pessimistic (P5)</p>
+        <div class="scenario-capital" id="scen5">—</div>
+        <p class="scenario-desc">worst 5% of simulations</p>
+      </div>
+      <div class="scenario-card base">
+        <p class="scenario-name">◆ Base (Median)</p>
+        <div class="scenario-capital" id="scen50">—</div>
+        <p class="scenario-desc">most likely scenario</p>
+      </div>
+      <div class="scenario-card optimistic">
+        <p class="scenario-name">⬆ Optimistic (P95)</p>
+        <div class="scenario-capital" id="scen95">—</div>
+        <p class="scenario-desc">best 5% of simulations</p>
+      </div>
+    </div>
+
+    <div class="chart-container">
+      <p class="card-title">Simulation distribution — required capital</p>
+      <canvas id="distChart" height="160"></canvas>
+    </div>
+
+    <p class="note">
+      For illustrative purposes only. This does not constitute financial advice.<br>
+      Past performance does not guarantee future results.
+    </p>
+
+  </div>
+
+</div>
+
+<!-- Chart.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script>
+
+// ---- SLIDER LABELS ----
+const sliders = {
+  divYield:    { id: 'yieldVal',  fmt: v => `${parseFloat(v).toFixed(1)}%` },
+  divGrowth:   { id: 'growthVal', fmt: v => `${parseFloat(v).toFixed(1)}%` },
+  taxRate:     { id: 'taxVal',    fmt: v => `${parseFloat(v).toFixed(1)}%` },
+  volatility:  { id: 'volVal',    fmt: v => `${parseFloat(v).toFixed(1)}%` },
+  simulations: { id: 'simVal',    fmt: v => parseInt(v).toLocaleString('en-US') },
+};
+
+for (const [id, cfg] of Object.entries(sliders)) {
+  const el = document.getElementById(id);
+  el.addEventListener('input', () => {
+    document.getElementById(cfg.id).textContent = cfg.fmt(el.value);
+  });
+}
+
+// ---- MONTE CARLO CORE ----
+function monteCarlo(targetMonthly, divYield, growthMean, growthStd, taxRate, years, N) {
+  const requiredCapitals = [];
+
+  for (let i = 0; i < N; i++) {
+    let y = divYield;
+
+    // Simula l'evoluzione dello yield nel tempo
+    for (let t = 0; t < years; t++) {
+      const shock = randomNormal(0, growthStd);
+      const g = growthMean + shock;
+      y = Math.max(0.001, y * (1 + g));
+    }
+
+    const netYield = y * (1 - taxRate);
+    // capitale = reddito_mensile * 12 / yield_netto
+    const capital = (targetMonthly * 12) / netYield;
+    requiredCapitals.push(capital);
+  }
+
+  return requiredCapitals.sort((a, b) => a - b);
+}
+
+function randomNormal(mu, sigma) {
+  // Box-Muller
+  const u1 = Math.random(), u2 = Math.random();
+  return mu + sigma * Math.sqrt(-2 * Math.log(u1)) * Math.cos(2 * Math.PI * u2);
+}
+
+function percentile(arr, p) {
+  const idx = Math.floor((p / 100) * arr.length);
+  return arr[Math.min(idx, arr.length - 1)];
+}
+
+// ---- FORMAT ----
+function fmtEur(v) {
+  return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(v);
+}
+
+// ---- HISTOGRAM ----
+let chartInst = null;
+
+function buildHistogram(capitals) {
+  const min = capitals[0], max = capitals[capitals.length - 1];
+  const bins = 30;
+  const step = (max - min) / bins;
+  const counts = Array(bins).fill(0);
+  const labels = [];
+
+  for (let i = 0; i < bins; i++) {
+    labels.push(fmtEur(min + i * step));
+  }
+
+  for (const v of capitals) {
+    const idx = Math.min(Math.floor((v - min) / step), bins - 1);
+    counts[idx]++;
+  }
+
+  // Color gradient: red → gold → green
+  const colors = counts.map((_, i) => {
+    const t = i / bins;
+    if (t < 0.5) {
+      const r = Math.round(224 + (201 - 224) * t * 2);
+      const g = Math.round(85 + (168 - 85) * t * 2);
+      const b = Math.round(85 + (76 - 85) * t * 2);
+      return `rgba(${r},${g},${b},0.7)`;
+    } else {
+      const tt = (t - 0.5) * 2;
+      const r = Math.round(201 + (61 - 201) * tt);
+      const g = Math.round(168 + (186 - 168) * tt);
+      const b = Math.round(76 + (122 - 76) * tt);
+      return `rgba(${r},${g},${b},0.7)`;
+    }
+  });
+
+  if (chartInst) chartInst.destroy();
+
+  const ctx = document.getElementById('distChart').getContext('2d');
+  chartInst = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [{
+        data: counts,
+        backgroundColor: colors,
+        borderWidth: 0,
+        barPercentage: 1,
+        categoryPercentage: 1,
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            title: ([item]) => `Around ${item.label}`,
+            label: (item) => `${item.raw} simulations`,
+          }
+        }
+      },
+      scales: {
+        x: {
+          ticks: {
+            color: '#4b5563',
+            font: { family: 'DM Mono', size: 9 },
+            maxRotation: 0,
+            maxTicksLimit: 6,
+          },
+          grid: { color: '#1e2530' }
+        },
+        y: {
+          ticks: { color: '#4b5563', font: { family: 'DM Mono', size: 9 } },
+          grid: { color: '#1e2530' }
+        }
+      }
+    }
+  });
+}
+
+// ---- MAIN ----
+function runSimulation() {
+  const target = parseFloat(document.getElementById('targetIncome').value);
+  const years  = parseInt(document.getElementById('years').value);
+  const yld    = parseFloat(document.getElementById('divYield').value) / 100;
+  const growth = parseFloat(document.getElementById('divGrowth').value) / 100;
+  const tax    = parseFloat(document.getElementById('taxRate').value) / 100;
+  const vol    = parseFloat(document.getElementById('volatility').value) / 100;
+  const N      = parseInt(document.getElementById('simulations').value);
+
+  if (!target || target <= 0 || isNaN(target)) return;
+
+  // Show loading
+  document.getElementById('loading').style.display = 'block';
+  document.getElementById('results').style.display = 'none';
+  document.getElementById('btnSimulate').disabled = true;
+
+  setTimeout(() => {
+    const capitals = monteCarlo(target, yld, growth, vol, tax, years, N);
+
+    const p5  = percentile(capitals, 5);
+    const p50 = percentile(capitals, 50);
+    const p95 = percentile(capitals, 95);
+    const mean = capitals.reduce((a,b)=>a+b,0)/capitals.length;
+
+    // Fill UI
+    document.getElementById('capitalResult').textContent = fmtEur(p50);
+    document.getElementById('incomeRef').textContent = fmtEur(target) + '/mese';
+
+    const netYieldBase = yld * (1 - tax);
+    const grossAnn = p50 * yld;
+    const taxAnn   = grossAnn * tax;
+    const netAnn   = grossAnn - taxAnn;
+
+    document.getElementById('statYieldAnn').textContent = (yld * 100).toFixed(1) + '%';
+    document.getElementById('statYieldNet').textContent = (netYieldBase * 100).toFixed(2) + '%';
+    document.getElementById('statTax').textContent = fmtEur(taxAnn);
+    document.getElementById('statAnnInc').textContent = fmtEur(netAnn);
+
+    document.getElementById('scen5').textContent  = fmtEur(p5);
+    document.getElementById('scen50').textContent = fmtEur(p50);
+    document.getElementById('scen95').textContent = fmtEur(p95);
+
+    buildHistogram(capitals);
+
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('results').style.display = 'block';
+    document.getElementById('btnSimulate').disabled = false;
+
+    document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 50);
+}
+
+</script>
+</body>
+</html>
