@@ -45,16 +45,17 @@ dividend-simulator/
 ---
 
 ## ⚙️ Parameters
-
+The parameters can be change
+--This is an example of how the parameters can be 
 | Parameter | Description | Default |
 |---|---|---|
-| Monthly income | Target monthly net income | €2,000 |
+| Monthly income | Target monthly net income | €20,000 |
 | Time horizon | Simulation period in years | 10 |
-| Dividend Yield | Portfolio gross annual yield | 4.0% |
-| Annual growth | Expected dividend growth rate | 5.0% |
-| Tax rate | Tax rate applied to dividends | 26% |
+| Dividend Yield | Portfolio gross annual yield | 5.0% |
+| Annual growth | Expected dividend growth rate | 6.0% |
+| Tax rate | Tax rate applied to dividends | 10% |
 | Volatility | Standard deviation of growth shocks | 2.0% |
-| Simulations | Number of Monte Carlo iterations | 5,000 |
+| Simulations | Number of Monte Carlo iterations | 15,000 |
 
 ---
 
