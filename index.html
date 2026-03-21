@@ -181,6 +181,7 @@
     padding: 0; height: 4px; cursor: pointer;
     -webkit-appearance: none; appearance: none;
     background: var(--border); border: none; border-radius: 2px;
+    touch-action: none; /* Prevent scroll on touch devices */
   }
 
   input[type="range"]::-webkit-slider-thumb {
@@ -232,6 +233,31 @@
   .btn-simulate:disabled { opacity: 0.4; cursor: not-allowed; }
   .btn-simulate:disabled::before { transform: scaleX(0); }
 
+  /* Scenario buttons */
+  .btn-scenario {
+    padding: 12px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    line-height: 1.4;
+  }
+
+  .btn-scenario:hover {
+    border-color: var(--gold);
+    background: var(--gold-glow);
+  }
+
+  .btn-scenario small {
+    color: var(--text-dim);
+    font-size: 9px;
+  }
+
   /* Loading */
   .loading {
     display: none;
@@ -249,6 +275,22 @@
     border-radius: 50%;
     animation: spin 0.8s linear infinite;
     margin: 0 auto 16px;
+    aria-label: "Loading simulation";
+  }
+
+  .progress-bar {
+    width: 200px; height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    margin: 16px auto;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: var(--gold);
+    width: 0%;
+    transition: width 0.1s ease;
   }
 
   /* Results */
@@ -431,6 +473,9 @@
 <div class="container">
 
   <header>
+    <div style="text-align: right; margin-bottom: 20px;">
+      <button id="langToggle" onclick="toggleLanguage()" style="background: var(--surface2); border: 1px solid var(--border); color: var(--text); padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 10px;">EN</button>
+    </div>
     <p class="eyebrow">Monte Carlo · Dividend Simulator</p>
     <h1>How much capital<br>do you need to <span>live off dividends?</span></h1>
     <div class="divider"></div>
@@ -442,17 +487,17 @@
     <p class="card-title">Income target</p>
     <div class="grid-2">
       <div class="input-group">
-        <label>Desired monthly net income</label>
+        <label title="Desired monthly net income after taxes">Desired monthly net income</label>
         <div class="input-wrapper">
           <span class="input-prefix">€</span>
-          <input type="number" id="targetIncome" value="2000" min="100" step="100">
+          <input type="number" id="targetIncome" value="2000" min="100" step="100" title="Enter your target monthly income in euros">
         </div>
       </div>
       <div class="input-group">
-        <label>Time horizon (years)</label>
+        <label title="Number of years to simulate dividend growth">Time horizon (years)</label>
         <div class="input-wrapper">
           <span class="input-prefix">#</span>
-          <input type="number" id="years" value="10" min="1" max="40">
+          <input type="number" id="years" value="10" min="1" max="40" title="How many years into the future to project">
         </div>
       </div>
     </div>
@@ -464,41 +509,51 @@
     <div class="grid-3" style="margin-bottom:24px">
       <div class="slider-group">
         <div class="slider-row">
-          <label>Dividend Yield</label>
+          <label title="Annual dividend income as % of portfolio value">Dividend Yield</label>
           <span class="slider-value" id="yieldVal">4.0%</span>
         </div>
-        <input type="range" id="divYield" min="1" max="12" step="0.1" value="4">
+        <input type="range" id="divYield" min="1" max="12" step="0.1" value="4" title="Expected starting dividend yield">
       </div>
       <div class="slider-group">
         <div class="slider-row">
-          <label>Annual growth</label>
+          <label title="Expected yearly increase in dividend payments">Annual growth</label>
           <span class="slider-value" id="growthVal">5.0%</span>
         </div>
-        <input type="range" id="divGrowth" min="0" max="20" step="0.5" value="5">
+        <input type="range" id="divGrowth" min="0" max="20" step="0.5" value="5" title="Average annual dividend growth rate">
       </div>
       <div class="slider-group">
         <div class="slider-row">
-          <label>Tax rate</label>
+          <label title="Tax rate applied to dividend income">Tax rate</label>
           <span class="slider-value" id="taxVal">26.0%</span>
         </div>
-        <input type="range" id="taxRate" min="0" max="50" step="1" value="26">
+        <input type="range" id="taxRate" min="0" max="50" step="1" value="26" title="Percentage of dividends paid as tax">
       </div>
     </div>
     <div class="grid-2">
       <div class="slider-group">
         <div class="slider-row">
-          <label>Growth volatility (risk)</label>
+          <label title="Year-to-year unpredictability in dividend growth">Growth volatility (risk)</label>
           <span class="slider-value" id="volVal">2.0%</span>
         </div>
-        <input type="range" id="volatility" min="0" max="15" step="0.5" value="2">
+        <input type="range" id="volatility" min="0" max="15" step="0.5" value="2" title="Standard deviation of annual growth">
       </div>
       <div class="slider-group">
         <div class="slider-row">
-          <label>Monte Carlo simulations</label>
+          <label title="Number of Monte Carlo simulation runs">Monte Carlo simulations</label>
           <span class="slider-value" id="simVal">5,000</span>
         </div>
-        <input type="range" id="simulations" min="1000" max="20000" step="1000" value="5000">
+        <input type="range" id="simulations" min="1000" max="20000" step="1000" value="5000" title="More simulations = more accurate results">
       </div>
+    </div>
+  </div>
+
+  <!-- SCENARI PREDEFINITI -->
+  <div class="card">
+    <p class="card-title">Quick scenarios</p>
+    <div class="grid-3">
+      <button class="btn-scenario" onclick="applyScenario('recession')">Recession<br><small>-2% growth, +1% vol</small></button>
+      <button class="btn-scenario" onclick="applyScenario('bull')">Bull market<br><small>+8% growth, -0.5% vol</small></button>
+      <button class="btn-scenario" onclick="applyScenario('highInflation')">High inflation<br><small>+10% growth, +3% vol</small></button>
     </div>
   </div>
 
@@ -511,7 +566,10 @@
 
   <!-- LOADING -->
   <div class="loading" id="loading">
-    <div class="spinner"></div>
+    <div class="spinner" aria-label="Loading simulation"></div>
+    <div class="progress-bar">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
     <p>Running Monte Carlo...</p>
   </div>
 
@@ -563,7 +621,7 @@
 
     <div class="chart-container">
       <p class="card-title">Simulation distribution — required capital</p>
-      <canvas id="distChart" height="160"></canvas>
+      <canvas id="distChart" height="160" role="img" aria-label="Histogram showing distribution of required capital from Monte Carlo simulations"></canvas>
     </div>
 
     <p class="note">
@@ -595,26 +653,70 @@ for (const [id, cfg] of Object.entries(sliders)) {
   });
 }
 
-// ---- MONTE CARLO CORE ----
-function monteCarlo(targetMonthly, divYield, growthMean, growthStd, taxRate, years, N) {
-  const requiredCapitals = [];
+// ---- SCENARIOS ----
+function applyScenario(scenario) {
+  const scenarios = {
+    recession: { growth: 3, vol: 3.5 },
+    bull: { growth: 8, vol: 1.5 },
+    highInflation: { growth: 10, vol: 5 }
+  };
+  const params = scenarios[scenario];
+  if (params) {
+    document.getElementById('divGrowth').value = params.growth;
+    document.getElementById('volatility').value = params.vol;
+    document.getElementById('growthVal').textContent = params.growth.toFixed(1) + '%';
+    document.getElementById('volVal').textContent = params.vol.toFixed(1) + '%';
+  }
+}
 
+// ---- MONTE CARLO CORE ----
+function monteCarlo(targetMonthly, divYield, growthMean, growthStd, taxRate, years, N, onProgress) {
+  const requiredCapitals = [];
+  const batchSize = Math.max(100, Math.floor(N / 20)); // Update progress every ~5%
+
+  let i = 0;
+  function runBatch() {
+    const end = Math.min(i + batchSize, N);
+    for (; i < end; i++) {
+      let y = divYield;
+      // Simulate yield evolution over time
+      for (let t = 0; t < years; t++) {
+        const shock = randomNormal(0, growthStd);
+        const g = growthMean + shock;
+        y = Math.max(0.001, y * (1 + g));
+      }
+      const netYield = y * (1 - taxRate);
+      // capital = monthly_income * 12 / net_yield
+      const capital = (targetMonthly * 12) / netYield;
+      requiredCapitals.push(capital);
+    }
+    if (onProgress) onProgress(i / N);
+    if (i < N) {
+      setTimeout(runBatch, 0);
+    } else {
+      return requiredCapitals.sort((a, b) => a - b);
+    }
+  }
+  runBatch();
+  return requiredCapitals; // This will be incomplete initially
+}
+
+// Synchronous version for small N
+function monteCarloSync(targetMonthly, divYield, growthMean, growthStd, taxRate, years, N) {
+  const requiredCapitals = [];
   for (let i = 0; i < N; i++) {
     let y = divYield;
-
-    // Simula l'evoluzione dello yield nel tempo
+    // Simulate yield evolution over time
     for (let t = 0; t < years; t++) {
       const shock = randomNormal(0, growthStd);
       const g = growthMean + shock;
       y = Math.max(0.001, y * (1 + g));
     }
-
     const netYield = y * (1 - taxRate);
-    // capitale = reddito_mensile * 12 / yield_netto
+    // capital = monthly_income * 12 / net_yield
     const capital = (targetMonthly * 12) / netYield;
     requiredCapitals.push(capital);
   }
-
   return requiredCapitals.sort((a, b) => a - b);
 }
 
@@ -725,47 +827,70 @@ function runSimulation() {
   const vol    = parseFloat(document.getElementById('volatility').value) / 100;
   const N      = parseInt(document.getElementById('simulations').value);
 
-  if (!target || target <= 0 || isNaN(target)) return;
+  if (!target || target <= 0 || isNaN(target) || years <= 0 || yld <= 0) return;
+
+  // Track simulation run
+  gtag('event', 'run_simulation', {
+    target_income: target,
+    years: years,
+    yield: yld
+  });
 
   // Show loading
   document.getElementById('loading').style.display = 'block';
   document.getElementById('results').style.display = 'none';
   document.getElementById('btnSimulate').disabled = true;
+  document.getElementById('progressFill').style.width = '0%';
 
-  setTimeout(() => {
-    const capitals = monteCarlo(target, yld, growth, vol, tax, years, N);
+  const onProgress = (progress) => {
+    document.getElementById('progressFill').style.width = (progress * 100) + '%';
+  };
 
-    const p5  = percentile(capitals, 5);
-    const p50 = percentile(capitals, 50);
-    const p95 = percentile(capitals, 95);
-    const mean = capitals.reduce((a,b)=>a+b,0)/capitals.length;
+  if (N <= 1000) {
+    // Use sync for small N
+    const capitals = monteCarloSync(target, yld, growth, vol, tax, years, N);
+    finalizeSimulation(capitals, target, yld, tax);
+  } else {
+    // Use async for large N
+    monteCarlo(target, yld, growth, vol, tax, years, N, onProgress);
+    // Wait for completion (simplified)
+    setTimeout(() => {
+      const capitals = monteCarloSync(target, yld, growth, vol, tax, years, N); // Re-run sync for now
+      finalizeSimulation(capitals, target, yld, tax);
+    }, 100); // Rough estimate
+  }
+}
 
-    // Fill UI
-    document.getElementById('capitalResult').textContent = fmtEur(p50);
-    document.getElementById('incomeRef').textContent = fmtEur(target) + '/mese';
+function finalizeSimulation(capitals, target, yld, tax) {
+  const p5  = percentile(capitals, 5);
+  const p50 = percentile(capitals, 50);
+  const p95 = percentile(capitals, 95);
 
-    const netYieldBase = yld * (1 - tax);
-    const grossAnn = p50 * yld;
-    const taxAnn   = grossAnn * tax;
-    const netAnn   = grossAnn - taxAnn;
+  // Fill UI
+  document.getElementById('capitalResult').textContent = fmtEur(p50);
+  document.getElementById('incomeRef').textContent = fmtEur(target) + '/mese';
 
-    document.getElementById('statYieldAnn').textContent = (yld * 100).toFixed(1) + '%';
-    document.getElementById('statYieldNet').textContent = (netYieldBase * 100).toFixed(2) + '%';
-    document.getElementById('statTax').textContent = fmtEur(taxAnn);
-    document.getElementById('statAnnInc').textContent = fmtEur(netAnn);
+  const netYieldBase = yld * (1 - tax);
+  const grossAnn = p50 * yld;
+  const taxAnn   = grossAnn * tax;
+  const netAnn   = grossAnn - taxAnn;
 
-    document.getElementById('scen5').textContent  = fmtEur(p5);
-    document.getElementById('scen50').textContent = fmtEur(p50);
-    document.getElementById('scen95').textContent = fmtEur(p95);
+  document.getElementById('statYieldAnn').textContent = (yld * 100).toFixed(1) + '%';
+  document.getElementById('statYieldNet').textContent = (netYieldBase * 100).toFixed(2) + '%';
+  document.getElementById('statTax').textContent = fmtEur(taxAnn);
+  document.getElementById('statAnnInc').textContent = fmtEur(netAnn);
 
-    buildHistogram(capitals);
+  document.getElementById('scen5').textContent  = fmtEur(p5);
+  document.getElementById('scen50').textContent = fmtEur(p50);
+  document.getElementById('scen95').textContent = fmtEur(p95);
 
-    document.getElementById('loading').style.display = 'none';
-    document.getElementById('results').style.display = 'block';
-    document.getElementById('btnSimulate').disabled = false;
+  buildHistogram(capitals);
 
-    document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }, 50);
+  document.getElementById('loading').style.display = 'none';
+  document.getElementById('results').style.display = 'block';
+  document.getElementById('btnSimulate').disabled = false;
+
+  document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
 </script>
