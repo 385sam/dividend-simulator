@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://385sam.github.io/dividend-simulator/sitemap.xml
