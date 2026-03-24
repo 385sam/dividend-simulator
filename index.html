@@ -233,31 +233,6 @@
   .btn-simulate:disabled { opacity: 0.4; cursor: not-allowed; }
   .btn-simulate:disabled::before { transform: scaleX(0); }
 
-  /* Scenario buttons */
-  .btn-scenario {
-    padding: 12px;
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    color: var(--text);
-    font-family: 'DM Mono', monospace;
-    font-size: 10px;
-    text-align: center;
-    cursor: pointer;
-    transition: all 0.2s;
-    line-height: 1.4;
-  }
-
-  .btn-scenario:hover {
-    border-color: var(--gold);
-    background: var(--gold-glow);
-  }
-
-  .btn-scenario small {
-    color: var(--text-dim);
-    font-size: 9px;
-  }
-
   /* Loading */
   .loading {
     display: none;
@@ -276,21 +251,6 @@
     animation: spin 0.8s linear infinite;
     margin: 0 auto 16px;
     aria-label: "Loading simulation";
-  }
-
-  .progress-bar {
-    width: 200px; height: 4px;
-    background: var(--border);
-    border-radius: 2px;
-    margin: 16px auto;
-    overflow: hidden;
-  }
-
-  .progress-fill {
-    height: 100%;
-    background: var(--gold);
-    width: 0%;
-    transition: width 0.1s ease;
   }
 
   /* Results */
@@ -441,6 +401,222 @@
     margin-top: 8px;
   }
 
+  /* Lead capture */
+  .lead-capture {
+    display: none;
+    margin-top: 48px;
+    animation: fadeUp 0.6s ease both;
+  }
+
+  .lead-card {
+    background: linear-gradient(135deg, var(--surface2) 0%, rgba(201,168,76,0.05) 100%);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 32px;
+    text-align: center;
+  }
+
+  .lead-eyebrow {
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 12px;
+  }
+
+  .lead-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+
+  .lead-subtitle {
+    font-size: 12px;
+    color: var(--text-mid);
+    line-height: 1.6;
+    margin-bottom: 24px;
+  }
+
+  #emailForm {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .lead-input-group {
+    display: flex;
+    gap: 8px;
+    max-width: 400px;
+    margin: 0 auto;
+  }
+
+  #emailInput {
+    flex: 1;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 16px;
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  #emailInput:focus {
+    border-color: var(--gold-dim);
+    box-shadow: 0 0 0 3px var(--gold-glow);
+  }
+
+  #emailInput::placeholder {
+    color: var(--text-dim);
+  }
+
+  .lead-btn {
+    padding: 12px 20px;
+    background: var(--gold);
+    border: none;
+    border-radius: 8px;
+    color: var(--bg);
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: all 0.3s;
+    white-space: nowrap;
+  }
+
+  .lead-btn:hover {
+    background: var(--gold-dim);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px var(--gold-glow);
+  }
+
+  .lead-btn:active {
+    transform: translateY(0);
+  }
+
+  .lead-notice {
+    font-size: 10px;
+    color: var(--text-dim);
+    margin-top: 4px;
+  }
+
+  .lead-consent {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    max-width: 400px;
+    margin: 0 auto;
+    text-align: left;
+    color: var(--text-dim);
+    font-size: 10px;
+    line-height: 1.5;
+    letter-spacing: 0.2px;
+  }
+
+  .lead-consent input {
+    margin-top: 2px;
+    accent-color: var(--gold);
+  }
+
+  .affiliate-zone {
+    display: none;
+    margin-top: 24px;
+    animation: fadeUp 0.7s ease both;
+  }
+
+  .affiliate-card {
+    background: linear-gradient(135deg, rgba(61,186,122,0.08) 0%, rgba(201,168,76,0.08) 100%);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px;
+  }
+
+  .affiliate-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    line-height: 1.2;
+    margin-bottom: 10px;
+  }
+
+  .affiliate-subtitle {
+    color: var(--text-mid);
+    font-size: 12px;
+    margin-bottom: 18px;
+    line-height: 1.6;
+  }
+
+  .affiliate-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+
+  .partner-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+  }
+
+  .partner-name {
+    color: var(--gold);
+    font-size: 11px;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+  }
+
+  .partner-copy {
+    color: var(--text-mid);
+    font-size: 11px;
+    line-height: 1.55;
+    min-height: 52px;
+    margin-bottom: 12px;
+  }
+
+  .affiliate-link {
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+    padding: 10px 12px;
+    border: 1px solid var(--gold);
+    border-radius: 8px;
+    color: var(--gold);
+    text-decoration: none;
+    font-size: 11px;
+    letter-spacing: 1px;
+    transition: all 0.25s;
+  }
+
+  .affiliate-link:hover {
+    background: var(--gold);
+    color: var(--bg);
+  }
+
+  .affiliate-disclosure {
+    margin-top: 14px;
+    color: var(--text-dim);
+    font-size: 10px;
+    line-height: 1.5;
+  }
+
+  @media (max-width: 600px) {
+    .lead-input-group {
+      flex-direction: column;
+    }
+    .lead-title {
+      font-size: 22px;
+    }
+    .affiliate-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
   /* Animations */
   @keyframes fadeDown {
     from { opacity: 0; transform: translateY(-20px); }
@@ -473,9 +649,6 @@
 <div class="container">
 
   <header>
-    <div style="text-align: right; margin-bottom: 20px;">
-      <button id="langToggle" onclick="toggleLanguage()" style="background: var(--surface2); border: 1px solid var(--border); color: var(--text); padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 10px;">EN</button>
-    </div>
     <p class="eyebrow">Monte Carlo · Dividend Simulator</p>
     <h1>How much capital<br>do you need to <span>live off dividends?</span></h1>
     <div class="divider"></div>
@@ -487,17 +660,17 @@
     <p class="card-title">Income target</p>
     <div class="grid-2">
       <div class="input-group">
-        <label title="Desired monthly net income after taxes">Desired monthly net income</label>
+        <label>Desired monthly net income</label>
         <div class="input-wrapper">
           <span class="input-prefix">€</span>
-          <input type="number" id="targetIncome" value="2000" min="100" step="100" title="Enter your target monthly income in euros">
+          <input type="number" id="targetIncome" value="2000" min="100" step="100">
         </div>
       </div>
       <div class="input-group">
-        <label title="Number of years to simulate dividend growth">Time horizon (years)</label>
+        <label>Time horizon (years)</label>
         <div class="input-wrapper">
           <span class="input-prefix">#</span>
-          <input type="number" id="years" value="10" min="1" max="40" title="How many years into the future to project">
+          <input type="number" id="years" value="10" min="1" max="40">
         </div>
       </div>
     </div>
@@ -509,51 +682,41 @@
     <div class="grid-3" style="margin-bottom:24px">
       <div class="slider-group">
         <div class="slider-row">
-          <label title="Annual dividend income as % of portfolio value">Dividend Yield</label>
+          <label>Dividend Yield</label>
           <span class="slider-value" id="yieldVal">4.0%</span>
         </div>
-        <input type="range" id="divYield" min="1" max="12" step="0.1" value="4" title="Expected starting dividend yield">
+        <input type="range" id="divYield" min="1" max="12" step="0.1" value="4">
       </div>
       <div class="slider-group">
         <div class="slider-row">
-          <label title="Expected yearly increase in dividend payments">Annual growth</label>
+          <label>Annual growth</label>
           <span class="slider-value" id="growthVal">5.0%</span>
         </div>
-        <input type="range" id="divGrowth" min="0" max="20" step="0.5" value="5" title="Average annual dividend growth rate">
+        <input type="range" id="divGrowth" min="0" max="20" step="0.5" value="5">
       </div>
       <div class="slider-group">
         <div class="slider-row">
-          <label title="Tax rate applied to dividend income">Tax rate</label>
+          <label>Tax rate</label>
           <span class="slider-value" id="taxVal">26.0%</span>
         </div>
-        <input type="range" id="taxRate" min="0" max="50" step="1" value="26" title="Percentage of dividends paid as tax">
+        <input type="range" id="taxRate" min="0" max="50" step="1" value="26">
       </div>
     </div>
     <div class="grid-2">
       <div class="slider-group">
         <div class="slider-row">
-          <label title="Year-to-year unpredictability in dividend growth">Growth volatility (risk)</label>
+          <label>Growth volatility (risk)</label>
           <span class="slider-value" id="volVal">2.0%</span>
         </div>
-        <input type="range" id="volatility" min="0" max="15" step="0.5" value="2" title="Standard deviation of annual growth">
+        <input type="range" id="volatility" min="0" max="15" step="0.5" value="2">
       </div>
       <div class="slider-group">
         <div class="slider-row">
-          <label title="Number of Monte Carlo simulation runs">Monte Carlo simulations</label>
+          <label>Monte Carlo simulations</label>
           <span class="slider-value" id="simVal">5,000</span>
         </div>
-        <input type="range" id="simulations" min="1000" max="20000" step="1000" value="5000" title="More simulations = more accurate results">
+        <input type="range" id="simulations" min="1000" max="20000" step="1000" value="5000">
       </div>
-    </div>
-  </div>
-
-  <!-- SCENARI PREDEFINITI -->
-  <div class="card">
-    <p class="card-title">Quick scenarios</p>
-    <div class="grid-3">
-      <button class="btn-scenario" onclick="applyScenario('recession')">Recession<br><small>-2% growth, +1% vol</small></button>
-      <button class="btn-scenario" onclick="applyScenario('bull')">Bull market<br><small>+8% growth, -0.5% vol</small></button>
-      <button class="btn-scenario" onclick="applyScenario('highInflation')">High inflation<br><small>+10% growth, +3% vol</small></button>
     </div>
   </div>
 
@@ -567,9 +730,6 @@
   <!-- LOADING -->
   <div class="loading" id="loading">
     <div class="spinner" aria-label="Loading simulation"></div>
-    <div class="progress-bar">
-      <div class="progress-fill" id="progressFill"></div>
-    </div>
     <p>Running Monte Carlo...</p>
   </div>
 
@@ -629,6 +789,51 @@
       Past performance does not guarantee future results.
     </p>
 
+    <!-- LEAD CAPTURE -->
+    <div class="lead-capture" id="leadCapture">
+      <div class="lead-card">
+        <p class="lead-eyebrow">📧 Stay updated</p>
+        <h3 class="lead-title">Get insights & advanced tools</h3>
+        <p class="lead-subtitle">Receive dividend calculator updates, market insights, and exclusive strategies.</p>
+        <form id="emailForm" onsubmit="captureEmail(event)">
+          <div class="lead-input-group">
+            <input type="email" id="emailInput" placeholder="your@email.com" required>
+            <button type="submit" class="lead-btn">✓ Subscribe</button>
+          </div>
+          <label class="lead-consent" for="leadConsent">
+            <input type="checkbox" id="leadConsent" required>
+            <span>I agree to receive emails and accept the privacy policy.</span>
+          </label>
+          <p class="lead-notice">No spam. Financial insights twice a month.</p>
+        </form>
+        <p class="lead-success" id="leadSuccess" style="display:none; color:var(--green); font-size:12px; text-align:center; margin-top:12px;">✓ Welcome! Check your inbox.</p>
+      </div>
+    </div>
+
+    <div class="affiliate-zone" id="affiliateZone">
+      <div class="affiliate-card">
+        <h3 class="affiliate-title">Tools to build your dividend strategy</h3>
+        <p class="affiliate-subtitle">Selected platforms that can help you move from simulation to execution.</p>
+        <div class="affiliate-grid">
+          <div class="partner-box">
+            <p class="partner-name">Broker partner</p>
+            <p class="partner-copy">Compare fees, dividend taxation support, and automation for recurring investments.</p>
+            <a class="affiliate-link" data-partner="broker" href="https://example.com/broker?utm_source=dividend-simulator&utm_medium=affiliate&utm_campaign=results" target="_blank" rel="nofollow sponsored noopener">See broker</a>
+          </div>
+          <div class="partner-box">
+            <p class="partner-name">Dividend screener</p>
+            <p class="partner-copy">Find dividend stocks by yield, growth history, payout ratio, and sector filters.</p>
+            <a class="affiliate-link" data-partner="screener" href="https://example.com/screener?utm_source=dividend-simulator&utm_medium=affiliate&utm_campaign=results" target="_blank" rel="nofollow sponsored noopener">Open screener</a>
+          </div>
+          <div class="partner-box">
+            <p class="partner-name">Portfolio tracker</p>
+            <p class="partner-copy">Monitor annual dividend income, ex-dividend dates, and forward cashflow projections.</p>
+            <a class="affiliate-link" data-partner="tracker" href="https://example.com/tracker?utm_source=dividend-simulator&utm_medium=affiliate&utm_campaign=results" target="_blank" rel="nofollow sponsored noopener">Track portfolio</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 
 </div>
@@ -636,6 +841,12 @@
 <!-- Chart.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script>
+
+function trackEvent(name, params = {}) {
+  if (typeof gtag === 'function') {
+    gtag('event', name, params);
+  }
+}
 
 // ---- SLIDER LABELS ----
 const sliders = {
@@ -653,70 +864,26 @@ for (const [id, cfg] of Object.entries(sliders)) {
   });
 }
 
-// ---- SCENARIOS ----
-function applyScenario(scenario) {
-  const scenarios = {
-    recession: { growth: 3, vol: 3.5 },
-    bull: { growth: 8, vol: 1.5 },
-    highInflation: { growth: 10, vol: 5 }
-  };
-  const params = scenarios[scenario];
-  if (params) {
-    document.getElementById('divGrowth').value = params.growth;
-    document.getElementById('volatility').value = params.vol;
-    document.getElementById('growthVal').textContent = params.growth.toFixed(1) + '%';
-    document.getElementById('volVal').textContent = params.vol.toFixed(1) + '%';
-  }
-}
-
 // ---- MONTE CARLO CORE ----
-function monteCarlo(targetMonthly, divYield, growthMean, growthStd, taxRate, years, N, onProgress) {
+function monteCarlo(targetMonthly, divYield, growthMean, growthStd, taxRate, years, N) {
   const requiredCapitals = [];
-  const batchSize = Math.max(100, Math.floor(N / 20)); // Update progress every ~5%
 
-  let i = 0;
-  function runBatch() {
-    const end = Math.min(i + batchSize, N);
-    for (; i < end; i++) {
-      let y = divYield;
-      // Simulate yield evolution over time
-      for (let t = 0; t < years; t++) {
-        const shock = randomNormal(0, growthStd);
-        const g = growthMean + shock;
-        y = Math.max(0.001, y * (1 + g));
-      }
-      const netYield = y * (1 - taxRate);
-      // capital = monthly_income * 12 / net_yield
-      const capital = (targetMonthly * 12) / netYield;
-      requiredCapitals.push(capital);
-    }
-    if (onProgress) onProgress(i / N);
-    if (i < N) {
-      setTimeout(runBatch, 0);
-    } else {
-      return requiredCapitals.sort((a, b) => a - b);
-    }
-  }
-  runBatch();
-  return requiredCapitals; // This will be incomplete initially
-}
-
-// Synchronous version for small N
-function monteCarloSync(targetMonthly, divYield, growthMean, growthStd, taxRate, years, N) {
-  const requiredCapitals = [];
   for (let i = 0; i < N; i++) {
     let y = divYield;
+
     // Simulate yield evolution over time
     for (let t = 0; t < years; t++) {
       const shock = randomNormal(0, growthStd);
       const g = growthMean + shock;
       y = Math.max(0.001, y * (1 + g));
     }
+
     const netYield = y * (1 - taxRate);
     // capital = monthly_income * 12 / net_yield
     const capital = (targetMonthly * 12) / netYield;
     requiredCapitals.push(capital);
   }
+
   return requiredCapitals.sort((a, b) => a - b);
 }
 
@@ -830,7 +997,7 @@ function runSimulation() {
   if (!target || target <= 0 || isNaN(target) || years <= 0 || yld <= 0) return;
 
   // Track simulation run
-  gtag('event', 'run_simulation', {
+  trackEvent('run_simulation', {
     target_income: target,
     years: years,
     yield: yld
@@ -840,28 +1007,10 @@ function runSimulation() {
   document.getElementById('loading').style.display = 'block';
   document.getElementById('results').style.display = 'none';
   document.getElementById('btnSimulate').disabled = true;
-  document.getElementById('progressFill').style.width = '0%';
 
-  const onProgress = (progress) => {
-    document.getElementById('progressFill').style.width = (progress * 100) + '%';
-  };
+  // Run simulation synchronously (no need for setTimeout on modern browsers)
+  const capitals = monteCarlo(target, yld, growth, vol, tax, years, N);
 
-  if (N <= 1000) {
-    // Use sync for small N
-    const capitals = monteCarloSync(target, yld, growth, vol, tax, years, N);
-    finalizeSimulation(capitals, target, yld, tax);
-  } else {
-    // Use async for large N
-    monteCarlo(target, yld, growth, vol, tax, years, N, onProgress);
-    // Wait for completion (simplified)
-    setTimeout(() => {
-      const capitals = monteCarloSync(target, yld, growth, vol, tax, years, N); // Re-run sync for now
-      finalizeSimulation(capitals, target, yld, tax);
-    }, 100); // Rough estimate
-  }
-}
-
-function finalizeSimulation(capitals, target, yld, tax) {
   const p5  = percentile(capitals, 5);
   const p50 = percentile(capitals, 50);
   const p95 = percentile(capitals, 95);
@@ -890,8 +1039,62 @@ function finalizeSimulation(capitals, target, yld, tax) {
   document.getElementById('results').style.display = 'block';
   document.getElementById('btnSimulate').disabled = false;
 
+  // Show lead capture section
+  document.getElementById('leadCapture').style.display = 'block';
+  document.getElementById('affiliateZone').style.display = 'block';
+  document.getElementById('emailInput').value = '';
+  document.getElementById('leadConsent').checked = false;
+  document.getElementById('leadSuccess').style.display = 'none';
+
   document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
+
+// ---- LEAD CAPTURE ----
+function captureEmail(event) {
+  event.preventDefault();
+  const email = document.getElementById('emailInput').value.trim().toLowerCase();
+  const hasConsent = document.getElementById('leadConsent').checked;
+  if (!email || !hasConsent) return;
+
+  const emailDomain = email.includes('@') ? email.split('@')[1] : 'unknown';
+
+  // Avoid sending personal data to analytics platforms.
+  trackEvent('email_capture', {
+    email_domain: emailDomain,
+    timestamp: new Date().toISOString()
+  });
+
+  // NOTE: Replace this local storage + console.log with your backend API call.
+  // Example: fetch('https://your-backend.com/api/subscribe', { method: 'POST', body: JSON.stringify({ email }) })
+  const existingLeads = JSON.parse(localStorage.getItem('leadEmails') || '[]');
+  if (!existingLeads.includes(email)) {
+    existingLeads.push(email);
+    localStorage.setItem('leadEmails', JSON.stringify(existingLeads));
+  }
+  console.log('Email captured:', email);
+  
+  // Show success message
+  document.getElementById('emailForm').style.display = 'none';
+  document.getElementById('leadSuccess').style.display = 'block';
+
+  // Reset form after 3 seconds
+  setTimeout(() => {
+    document.getElementById('emailForm').style.display = 'flex';
+    document.getElementById('leadSuccess').style.display = 'none';
+    document.getElementById('emailInput').value = '';
+    document.getElementById('leadConsent').checked = false;
+  }, 3000);
+}
+
+// ---- AFFILIATE TRACKING ----
+document.querySelectorAll('.affiliate-link').forEach((link) => {
+  link.addEventListener('click', () => {
+    trackEvent('affiliate_click', {
+      partner: link.dataset.partner || 'unknown',
+      placement: 'results_section',
+    });
+  });
+});
 
 </script>
 <!-- FOOTER EXPLANATION -->
@@ -941,9 +1144,6 @@ function finalizeSimulation(capitals, target, yld, tax) {
   </p>
 
 </footer>
-
-</body>
-</html>
 
 </body>
 </html>
