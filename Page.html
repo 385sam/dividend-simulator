@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Come vivere di dividendi: guida SEO 2026 per Italia, Francia, Spagna, Svizzera, USA, UK e Canada | Simulatore</title>
+  <meta name="description" content="Guida SEO su come vivere di dividendi in modo realistico: formula, capitale necessario, rischi da considerare e come usare il simulatore Monte Carlo per stimare il tuo obiettivo netto.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://385sam.github.io/dividend-simulator/dividend-income-capital.html">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f5efe3;
+      --paper: rgba(255, 252, 246, 0.92);
+      --ink: #1f1a14;
+      --muted: #63584c;
+      --accent: #ad6f1f;
+      --accent-strong: #8e5712;
+      --accent-soft: #f3e2c8;
+      --line: #e8dbc6;
+      --line-strong: #d8c2a0;
+      --shadow: 0 24px 60px rgba(36, 26, 14, 0.12);
+      --radius: 20px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Manrope", Arial, sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 6% 6%, #ffe7bf 0%, transparent 33%),
+        radial-gradient(circle at 85% 18%, #f7dfb2 0%, transparent 28%),
+        radial-gradient(circle at 40% 100%, #efdac0 0%, transparent 34%),
+        linear-gradient(180deg, #faf4ea 0%, #f0e5d3 100%);
+      line-height: 1.72;
+      padding: 26px;
+    }
+
+    .decor {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.35;
+      background-image:
+        linear-gradient(90deg, transparent 24px, rgba(173, 111, 31, 0.04) 25px, transparent 26px),
+        linear-gradient(transparent 24px, rgba(173, 111, 31, 0.04) 25px, transparent 26px);
+      background-size: 26px 26px;
+    }
+
+    .wrap {
+      position: relative;
+      z-index: 1;
+      max-width: 1080px;
+      margin: 0 auto;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      backdrop-filter: blur(4px);
+    }
+
+    header {
+      padding: 50px 42px 30px;
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255, 248, 232, 0.95) 0%, rgba(255, 252, 246, 0.9) 100%);
+    }
+
+    .eyebrow {
+      display: inline-block;
+      margin: 0 0 14px;
+      padding: 6px 14px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent-strong);
+      border: 1px solid rgba(173, 111, 31, 0.2);
+      font-size: 11px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+
+    h1 {
+      margin: 0 0 14px;
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(36px, 5vw, 60px);
+      line-height: 1.03;
+      letter-spacing: -0.02em;
+    }
+
+    .sub {
+      margin: 0;
+      max-width: 75ch;
+      color: var(--muted);
+      font-size: 18px;
+    }
+
+    .controls {
+      margin-top: 22px;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(180px, 280px));
+      gap: 14px;
+      align-items: end;
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.72);
+    }
+
+    .control {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .control label {
+      font-size: 12px;
+      letter-spacing: 0.85px;
+      text-transform: uppercase;
+      color: var(--accent-strong);
+      font-weight: 700;
+    }
+
+    .control select {
+      appearance: none;
+      border: 1px solid var(--line-strong);
+      border-radius: 11px;
+      background: #fff;
+      color: var(--ink);
+      font-size: 14px;
+      padding: 11px 12px;
+      font-family: "Manrope", Arial, sans-serif;
+    }
+
+    article {
+      padding: 34px 42px 48px;
+    }
+
+    h2 {
+      margin: 36px 0 10px;
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(30px, 3.3vw, 40px);
+      line-height: 1.1;
+      color: #2b2115;
+    }
+
+    h3 {
+      margin: 0 0 8px;
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 30px;
+      line-height: 1.1;
+      color: #322618;
+    }
+
+    p { margin: 0 0 16px; }
+    ul, ol { margin: 0 0 16px; padding-left: 22px; }
+    li { margin-bottom: 9px; }
+
+    .lead {
+      font-size: 20px;
+      color: #2b251f;
+      padding: 18px 18px 4px;
+      border-radius: 14px;
+      background: rgba(255, 249, 239, 0.7);
+      border: 1px solid var(--line);
+    }
+
+    .kicker-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-top: 20px;
+    }
+
+    .kicker {
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #fff;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .kicker:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 22px rgba(51, 33, 12, 0.1);
+    }
+
+    .kicker strong {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 12px;
+      letter-spacing: 0.9px;
+      text-transform: uppercase;
+      color: var(--accent-strong);
+    }
+
+    .box {
+      margin: 18px 0;
+      padding: 18px 20px;
+      background: linear-gradient(140deg, #fff8ea 0%, #fff2dc 100%);
+      border: 1px solid var(--line-strong);
+      border-radius: 14px;
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.55);
+    }
+
+    .country-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 16px;
+    }
+
+    .country-card {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: #fff;
+      padding: 18px 18px 14px;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+
+    .country-card::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, #f3c57d 0%, #b16f20 100%);
+    }
+
+    .country-card:hover { transform: translateY(-2px); }
+    .country-card.hidden { display: none; }
+
+    .country-card.active {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px rgba(173, 111, 31, 0.16);
+    }
+
+    .country-card p:last-child,
+    .country-card ul:last-child { margin-bottom: 0; }
+
+    .note {
+      font-size: 14px;
+      color: var(--muted);
+      background: #fff8ed;
+      border-left: 4px solid var(--accent);
+      padding: 14px 16px;
+      border-radius: 10px;
+      margin: 20px 0;
+    }
+
+    .faq {
+      display: grid;
+      gap: 12px;
+      margin-top: 10px;
+    }
+
+    .faq-item {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 14px 14px 2px;
+      background: #fff;
+    }
+
+    .faq-item h3 {
+      font-size: 26px;
+      margin-bottom: 6px;
+    }
+
+    .cta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin: 22px 0 8px;
+    }
+
+    .cta {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(140deg, #b97921 0%, #965d14 100%);
+      color: #fff;
+      text-decoration: none;
+      border-radius: 11px;
+      padding: 12px 18px;
+      font-size: 14px;
+      letter-spacing: 0.4px;
+      font-weight: 700;
+      border: 1px solid rgba(120, 72, 12, 0.34);
+      transition: transform 0.18s, box-shadow 0.18s;
+    }
+
+    .cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 24px rgba(118, 74, 18, 0.24);
+    }
+
+    .cta.secondary {
+      background: transparent;
+      color: var(--accent-strong);
+      border: 1px solid var(--accent);
+    }
+
+    footer {
+      padding: 20px 42px 26px;
+      border-top: 1px solid var(--line);
+      background: #fff7ea;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    @media (max-width: 860px) {
+      body { padding: 14px; }
+      header, article, footer { padding-left: 18px; padding-right: 18px; }
+      .kicker-grid, .country-grid { grid-template-columns: 1fr; }
+      .controls { grid-template-columns: 1fr; }
+      .lead { font-size: 18px; }
+      h3 { font-size: 28px; }
+      .faq-item h3 { font-size: 24px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="decor" aria-hidden="true"></div>
+
+  <div class="wrap">
+    <header>
+      <p class="eyebrow" id="eyebrow"></p>
+      <h1 id="title"></h1>
+      <p class="sub" id="sub"></p>
+
+      <div class="controls" aria-label="Guide controls">
+        <div class="control">
+          <label for="countrySelect" id="countryLabel"></label>
+          <select id="countrySelect"></select>
+        </div>
+        <div class="control">
+          <label for="langSelect" id="langLabel"></label>
+          <select id="langSelect">
+            <option value="it">Italiano</option>
+            <option value="en">English</option>
+            <option value="fr">Francais</option>
+          </select>
+        </div>
+      </div>
+    </header>
+
+    <article>
+      <p class="lead" id="lead"></p>
+
+      <div class="kicker-grid" id="kickerGrid"></div>
+
+      <h2 id="formulaTitle"></h2>
+      <p id="formulaCopy"></p>
+      <div class="box"><strong id="formulaBox"></strong></div>
+      <p id="formulaExample"></p>
+
+      <h2 id="strategyTitle"></h2>
+      <ul id="strategyList"></ul>
+
+      <div class="note" id="note"></div>
+
+      <h2 id="countryTitle"></h2>
+      <p id="countryCopy"></p>
+      <div class="country-grid" id="countryGrid"></div>
+
+      <h2 id="simTitle"></h2>
+      <p id="simCopy"></p>
+      <p id="simExtra"></p>
+
+      <div class="box"><strong id="simBoxLabel"></strong> <span id="simBoxText"></span></div>
+
+      <h2 id="stepsTitle"></h2>
+      <ol id="stepsList"></ol>
+
+      <h2 id="faqTitle"></h2>
+      <section class="faq" id="faqList"></section>
+
+      <div class="cta-row">
+        <a class="cta" href="index.html" id="ctaMain"></a>
+        <a class="cta secondary" href="index.html#results" id="ctaSecondary"></a>
+      </div>
+    </article>
+
+    <footer id="footerText"></footer>
+  </div>
+
+  <script>
+    const countrySelect = document.getElementById("countrySelect");
+    const langSelect = document.getElementById("langSelect");
+    const descMeta = document.querySelector('meta[name="description"]');
+
+    const i18n = {
+       en: {
+        htmlLang: "en",
+        pageTitle: "How to live on dividends: SEO guide 2026 for Italy, France, Spain, Switzerland, USA, UK, and Canada | Simulator",
+        metaDescription: "SEO guide on living on dividends realistically: formula, required capital, key risks, and how to use a Monte Carlo simulator for net income planning.",
+        eyebrow: "SEO Guide 2026",
+        countryLabel: "Country selector",
+        langLabel: "Language",
+        countryOptions: [
+          { value: "all", label: "All countries" },
+          { value: "it", label: "Italy" },
+          { value: "fr", label: "France" },
+          { value: "es", label: "Spain" },
+          { value: "ch", label: "Switzerland" },
+          { value: "us", label: "USA" },
+          { value: "uk", label: "UK" },
+          { value: "ca", label: "Canada" }
+        ],
+        title: "How to live on dividends realistically, with a Monte Carlo simulator",
+        sub: "A practical guide for building dividend income plans in Italy, France, Spain, Switzerland, USA, UK, and Canada with a clear and realistic method.",
+        lead: "Living on dividends is about system design, not stock picking. You need realistic net yield assumptions, tax-aware planning, diversification, and a safety buffer.",
+        kickers: [
+          { title: "Goal", text: "Turn your monthly net income target into a credible capital target." },
+          { title: "Method", text: "Use prudent net-yield assumptions instead of optimistic gross numbers." },
+          { title: "Tool", text: "Validate your strategy through Monte Carlo scenarios." }
+        ],
+        formulaTitle: "Core formula to live on dividends",
+        formulaCopy: "The relationship is simple: the higher your target monthly net income, the more capital you need. The common mistake is ignoring taxes, costs, and weaker market periods.",
+        formulaBox: "Required capital = (Target monthly net income x 12) / Net dividend yield",
+        formulaExample: "Example: to get 2,000 net per month with a prudent 3% net yield, theoretical capital is around 800,000. At 2.5%, required capital increases sharply.",
+        strategyTitle: "How to build a robust strategy",
+        strategy: [
+          "Set a clear monthly net income target.",
+          "Estimate a prudent and durable net yield.",
+          "Include taxes, foreign withholding, and costs realistically.",
+          "Assess dividend stability, payout ratio, and business quality.",
+          "Diversify to reduce cut risk and concentration.",
+          "Recalibrate the plan at least once per year."
+        ],
+        note: "This page is educational and does not replace professional tax or financial advice.",
+        countryTitle: "Country-by-country guide",
+        countryCopy: "Select a country to view practical notes aligned with your tax residence and dividend income planning.",
+        countries: {
+          it: {
+            name: "Italy",
+            text: "In Italy, focus first on post-tax net yield, including costs, foreign withholding, and treaty effects.",
+            bullets: [
+              "Always plan from net spendable income.",
+              "Check account regime and instrument treatment.",
+              "Keep conservative return assumptions."
+            ]
+          },
+          fr: {
+            name: "France",
+            text: "In France, dividend outcomes depend on your applicable tax framework and full taxpayer profile.",
+            bullets: [
+              "Model net income under your real regime.",
+              "Avoid fixed single-yield assumptions.",
+              "Review foreign withholding impact."
+            ]
+          },
+          es: {
+            name: "Spain",
+            text: "In Spain, total annual savings income and its applicable bracket are key to realistic planning.",
+            bullets: [
+              "Project dividends on an annual basis.",
+              "Account for uneven cash distributions.",
+              "Use conservative simulator scenarios."
+            ]
+          },
+          ch: {
+            name: "Switzerland",
+            text: "In Switzerland, personal and local context can materially change final net outcomes.",
+            bullets: [
+              "Estimate total taxable income carefully.",
+              "Consider local specific rules where relevant.",
+              "Use a wider safety margin."
+            ]
+          },
+          us: {
+            name: "USA",
+            text: "In the USA, the qualified vs ordinary dividend split can significantly affect net income.",
+            bullets: [
+              "Separate qualified and ordinary dividends.",
+              "Check account type and local taxes.",
+              "Use pessimistic outcomes as baseline."
+            ]
+          },
+          uk: {
+            name: "UK",
+            text: "In the UK, income band and account wrapper strongly shape net dividend results.",
+            bullets: [
+              "Confirm tax treatment for each wrapper.",
+              "Do not confuse gross coupon with spendable cash.",
+              "Stress-test growth and volatility assumptions."
+            ]
+          },
+          ca: {
+            name: "Canada",
+            text: "In Canada, dividend type and total income level can alter net results materially.",
+            bullets: [
+              "Distinguish eligible vs non-eligible dividends.",
+              "Start from total annual income context.",
+              "Confirm capital needs through multiple scenarios."
+            ]
+          }
+        },
+        simTitle: "Why the simulator is essential",
+        simCopy: "A Monte Carlo simulator turns theory into planning: start from your monthly net target, set yield, growth, volatility, and taxes, and observe the distribution of outcomes.",
+        simExtra: "This avoids over-reliance on a single optimistic average and helps you evaluate long-term income sustainability.",
+        simBoxLabel: "What the simulator shows:",
+        simBoxText: "required capital, probability ranges, conservative scenarios, and sensitivity to assumptions.",
+        stepsTitle: "How to use this guide with the simulator",
+        steps: [
+          "Set your monthly net income target.",
+          "Input prudent yield and growth assumptions.",
+          "Apply tax settings aligned with the selected country.",
+          "Compare conservative, base, and favorable scenarios.",
+          "Update the plan when markets or tax rules change."
+        ],
+        faqTitle: "FAQ",
+        faq: [
+          {
+            q: "How much capital is needed to live on dividends?",
+            a: "It depends on your monthly net target and realistic net yield. Lower prudent yield assumptions require more capital."
+          },
+          {
+            q: "Can one number work for every country?",
+            a: "No. Tax residence, account structure, and dividend treatment differ and change net results."
+          },
+          {
+            q: "Does the simulator replace tax advice?",
+            a: "No. It is a planning tool. Formal tax validation should be done with a qualified local professional."
+          },
+          {
+            q: "Why is this page strong for SEO?",
+            a: "It directly answers the main search intent, covers highly searched countries, and guides users to the simulator with practical content."
+          }
+        ],
+        ctaMain: "Open the dividend simulator",
+        ctaSecondary: "Go to simulator results",
+        footer: "Educational content only. Not financial or tax advice."
+      },
+      it: {
+        htmlLang: "it",
+        pageTitle: "Come vivere di dividendi: guida SEO 2026 per Italia, Francia, Spagna, Svizzera, USA, UK e Canada | Simulatore",
+        metaDescription: "Guida SEO su come vivere di dividendi in modo realistico: formula, capitale necessario, rischi da considerare e come usare il simulatore Monte Carlo per stimare il tuo obiettivo netto.",
+        eyebrow: "Guida SEO 2026",
+        countryLabel: "Selettore paese",
+        langLabel: "Lingua",
+        countryOptions: [
+          { value: "all", label: "Tutti i paesi" },
+          { value: "it", label: "Italia" },
+          { value: "fr", label: "Francia" },
+          { value: "es", label: "Spagna" },
+          { value: "ch", label: "Svizzera" },
+          { value: "us", label: "USA" },
+          { value: "uk", label: "UK" },
+          { value: "ca", label: "Canada" }
+        ],
+        title: "Come vivere di dividendi in modo realistico, con simulatore Monte Carlo",
+        sub: "Una guida pratica per chi cerca un reddito da dividendi in Italia, Francia, Spagna, Svizzera, USA, UK e Canada, senza confronti inutili e con metodo operativo.",
+        lead: "Vivere di dividendi significa costruire un sistema sostenibile, non inseguire il titolo perfetto. Servono capitale, rendimento netto realistico, fiscalita ben calcolata, diversificazione e un margine di sicurezza costante.",
+        kickers: [
+          { title: "Obiettivo", text: "Convertire un reddito netto mensile desiderato in un capitale investito credibile." },
+          { title: "Metodo", text: "Usare stime prudenti sul rendimento netto, non numeri lordi troppo ottimistici." },
+          { title: "Strumento", text: "Validare il piano con il simulatore Monte Carlo e scenari multipli." }
+        ],
+        formulaTitle: "Formula base per vivere di dividendi",
+        formulaCopy: "La relazione e diretta: piu alto e il reddito netto mensile che vuoi ottenere, piu capitale serve. L errore tipico e ignorare tasse, costi e periodi di mercato deboli.",
+        formulaBox: "Capitale necessario = (Reddito netto mensile desiderato x 12) / Rendimento netto da dividendi",
+        formulaExample: "Esempio: per 2.000 netti al mese con rendimento netto prudente del 3%, il capitale teorico e circa 800.000. Con 2,5%, il capitale richiesto cresce in modo importante.",
+        strategyTitle: "Come impostare una strategia solida",
+        strategy: [
+          "Definisci il target mensile netto che vuoi realmente coprire.",
+          "Stima un rendimento netto prudente e sostenibile nel tempo.",
+          "Inserisci fiscalita, ritenute estere e costi in modo realistico.",
+          "Valuta stabilita del dividendo, payout ratio e qualita del business.",
+          "Diversifica per ridurre il rischio di tagli o concentrazione.",
+          "Ricalibra il piano almeno ogni 12 mesi."
+        ],
+        note: "Questa guida e informativa e non sostituisce consulenza fiscale o finanziaria professionale.",
+        countryTitle: "Guida paese per paese",
+        countryCopy: "Seleziona un paese per leggere indicazioni pratiche coerenti con la tua residenza fiscale e con la pianificazione di un reddito da dividendi sostenibile.",
+        countries: {
+          it: {
+            name: "Italia",
+            text: "In Italia la priorita e stimare il rendimento netto dopo imposte e costi, includendo eventuali ritenute estere e doppia imposizione.",
+            bullets: [
+              "Parti sempre dal netto disponibile.",
+              "Verifica regime fiscale e natura dello strumento.",
+              "Mantieni margini prudenti sul rendimento atteso."
+            ]
+          },
+          fr: {
+            name: "Francia",
+            text: "In Francia il risultato dipende dal regime fiscale applicabile e dal profilo complessivo del contribuente.",
+            bullets: [
+              "Calcola il netto in base al tuo regime reale.",
+              "Evita di usare un unico rendimento teorico fisso.",
+              "Controlla impatto delle ritenute estere."
+            ]
+          },
+          es: {
+            name: "Spagna",
+            text: "In Spagna e fondamentale valutare il reddito da risparmio complessivo e la fascia applicabile sul totale annuo.",
+            bullets: [
+              "Proietta dividendi su base annua.",
+              "Considera la distribuzione non uniforme durante l anno.",
+              "Testa scenari prudenti nel simulatore."
+            ]
+          },
+          ch: {
+            name: "Svizzera",
+            text: "In Svizzera conta molto il contesto personale e territoriale, quindi la pianificazione deve restare personalizzata.",
+            bullets: [
+              "Stima il reddito imponibile totale.",
+              "Valuta eventuali specificita locali.",
+              "Usa un margine di sicurezza piu alto."
+            ]
+          },
+          us: {
+            name: "USA",
+            text: "Negli USA la differenza tra dividendi qualificati e ordinari puo cambiare in modo rilevante il netto finale.",
+            bullets: [
+              "Distingui qualified e ordinary dividends.",
+              "Verifica tipo di conto e tassazione locale.",
+              "Usa lo scenario pessimista come baseline."
+            ]
+          },
+          uk: {
+            name: "UK",
+            text: "Nel Regno Unito il risultato dipende da fascia di reddito e contenitore fiscale usato per investire.",
+            bullets: [
+              "Controlla il trattamento fiscale del conto.",
+              "Non confondere cedola lorda e cassa spendibile.",
+              "Stressa il piano con volatilita e crescita diverse."
+            ]
+          },
+          ca: {
+            name: "Canada",
+            text: "In Canada la natura del dividendo e il livello di reddito complessivo incidono sul reddito netto disponibile.",
+            bullets: [
+              "Distingui dividendi eleggibili e non eleggibili.",
+              "Parti dal reddito complessivo annuo.",
+              "Conferma il capitale con scenari multipli."
+            ]
+          }
+        },
+        simTitle: "Perche il simulatore e centrale",
+        simCopy: "Il simulatore Monte Carlo trasforma la teoria in pianificazione: parti dal reddito netto mensile, inserisci rendimento, crescita, volatilita e tassazione, poi osservi la distribuzione dei risultati.",
+        simExtra: "In questo modo non dipendi da una singola media ottimistica, ma valuti la probabilita reale di mantenere il tuo reddito da dividendi nel tempo.",
+        simBoxLabel: "Cosa mostra il simulatore:",
+        simBoxText: "capitale richiesto, intervalli probabilistici, scenari conservativi e impatto delle ipotesi.",
+        stepsTitle: "Come usare questa guida con il simulatore",
+        steps: [
+          "Definisci il tuo obiettivo netto mensile.",
+          "Inserisci ipotesi prudenti su rendimento e crescita.",
+          "Configura una fiscalita coerente con il paese selezionato.",
+          "Confronta scenario prudente, base e favorevole.",
+          "Aggiorna il piano quando cambiano mercato o regole fiscali."
+        ],
+        faqTitle: "FAQ",
+        faq: [
+          {
+            q: "Quanto capitale serve per vivere di dividendi?",
+            a: "Dipende dal tuo obiettivo netto mensile e dal rendimento netto realistico. In generale, piu il rendimento e prudente, piu il capitale richiesto aumenta."
+          },
+          {
+            q: "Posso usare un solo numero per tutti i paesi?",
+            a: "No. Residenza fiscale, tipo di conto e trattamento dei dividendi cambiano il risultato finale."
+          },
+          {
+            q: "Il simulatore sostituisce la consulenza fiscale?",
+            a: "No. E uno strumento di pianificazione, ma la verifica fiscale va fatta con un professionista del paese corretto."
+          },
+          {
+            q: "Perche questa pagina e ottima per SEO?",
+            a: "Perche intercetta l intento di ricerca su vivere di dividendi, integra i paesi piu cercati e accompagna l utente verso il simulatore con contenuto utile."
+          }
+        ],
+        ctaMain: "Apri il simulatore dividendi",
+        ctaSecondary: "Vai ai risultati del simulatore",
+        footer: "Contenuto informativo ed educativo, non consulenza finanziaria o fiscale."
+      },
+
+      fr: {
+        htmlLang: "fr",
+        pageTitle: "Vivre des dividendes: guide SEO 2026 pour Italie, France, Espagne, Suisse, USA, UK et Canada | Simulateur",
+        metaDescription: "Guide SEO pour vivre des dividendes de facon realiste: formule, capital necessaire, risques et utilisation d un simulateur Monte Carlo.",
+        eyebrow: "Guide SEO 2026",
+        countryLabel: "Selection du pays",
+        langLabel: "Langue",
+        countryOptions: [
+          { value: "all", label: "Tous les pays" },
+          { value: "it", label: "Italie" },
+          { value: "fr", label: "France" },
+          { value: "es", label: "Espagne" },
+          { value: "ch", label: "Suisse" },
+          { value: "us", label: "USA" },
+          { value: "uk", label: "UK" },
+          { value: "ca", label: "Canada" }
+        ],
+        title: "Comment vivre des dividendes de facon realiste avec un simulateur Monte Carlo",
+        sub: "Un guide pratique pour construire un revenu de dividendes en Italie, France, Espagne, Suisse, USA, UK et Canada avec une methode claire et realiste.",
+        lead: "Vivre des dividendes demande une architecture solide, pas seulement un bon titre: hypotheses prudentes de rendement net, fiscalite, diversification et marge de securite.",
+        kickers: [
+          { title: "Objectif", text: "Transformer un revenu net mensuel cible en objectif de capital credible." },
+          { title: "Methode", text: "Utiliser des hypotheses prudentes sur le rendement net." },
+          { title: "Outil", text: "Valider le plan avec des scenarios Monte Carlo." }
+        ],
+        formulaTitle: "Formule de base pour vivre des dividendes",
+        formulaCopy: "La logique est simple: plus le revenu net mensuel cible est eleve, plus le capital requis augmente. L erreur classique est d ignorer impots, frais et phases de marche faibles.",
+        formulaBox: "Capital requis = (Revenu net mensuel cible x 12) / Rendement net des dividendes",
+        formulaExample: "Exemple: pour 2 000 nets par mois avec un rendement net prudent de 3%, le capital theorique est proche de 800 000. A 2,5%, le capital necessaire augmente fortement.",
+        strategyTitle: "Comment construire une strategie robuste",
+        strategy: [
+          "Definir un objectif net mensuel clair.",
+          "Estimer un rendement net prudent et durable.",
+          "Integrer fiscalite, retenues et frais de facon realiste.",
+          "Verifier stabilite du dividende, payout ratio et qualite.",
+          "Diversifier pour reduire le risque de coupe.",
+          "Recalibrer le plan au moins une fois par an."
+        ],
+        note: "Ce contenu est educatif et ne remplace pas un conseil fiscal ou financier professionnel.",
+        countryTitle: "Guide par pays",
+        countryCopy: "Selectionnez un pays pour voir des indications pratiques adaptees a votre residence fiscale et a votre plan de revenu de dividendes.",
+        countries: {
+          it: {
+            name: "Italie",
+            text: "En Italie, il faut d abord modeliser le rendement net apres impots, frais et retenues etrangeres eventuelles.",
+            bullets: [
+              "Partir du revenu net reellement disponible.",
+              "Verifier regime fiscal et nature des instruments.",
+              "Conserver des hypotheses prudentes."
+            ]
+          },
+          fr: {
+            name: "France",
+            text: "En France, le resultat depend du cadre fiscal applicable et du profil global du contribuable.",
+            bullets: [
+              "Modeliser le net selon votre regime reel.",
+              "Eviter un rendement unique suppose fixe.",
+              "Mesurer l impact des retenues etrangeres."
+            ]
+          },
+          es: {
+            name: "Espagne",
+            text: "En Espagne, le revenu total de l epargne et sa tranche applicable sont essentiels dans le calcul net.",
+            bullets: [
+              "Projeter les dividendes sur l annee complete.",
+              "Prendre en compte la saisonnalite des versements.",
+              "Tester des scenarios conservateurs."
+            ]
+          },
+          ch: {
+            name: "Suisse",
+            text: "En Suisse, le contexte personnel et local peut changer sensiblement le resultat net final.",
+            bullets: [
+              "Estimer soigneusement le revenu imposable total.",
+              "Considerer les specificites locales utiles.",
+              "Garder une marge de securite plus large."
+            ]
+          },
+          us: {
+            name: "USA",
+            text: "Aux USA, la distinction entre dividendes qualifies et ordinaires peut modifier fortement le net.",
+            bullets: [
+              "Distinguer qualified et ordinary dividends.",
+              "Verifier type de compte et fiscalite locale.",
+              "Utiliser le scenario pessimiste en reference."
+            ]
+          },
+          uk: {
+            name: "UK",
+            text: "Au Royaume-Uni, la tranche de revenu et l enveloppe fiscale influencent directement le net.",
+            bullets: [
+              "Verifier le traitement fiscal de chaque compte.",
+              "Ne pas confondre brut distribue et cash disponible.",
+              "Tester plusieurs hypotheses de volatilite."
+            ]
+          },
+          ca: {
+            name: "Canada",
+            text: "Au Canada, le type de dividende et le revenu global changent le resultat net disponible.",
+            bullets: [
+              "Distinguer eligible et non-eligible dividends.",
+              "Partir du contexte annuel complet.",
+              "Valider le capital via plusieurs scenarios."
+            ]
+          }
+        },
+        simTitle: "Pourquoi le simulateur est essentiel",
+        simCopy: "Le simulateur Monte Carlo transforme la theorie en plan concret: objectif mensuel net, rendement, croissance, volatilite et fiscalite.",
+        simExtra: "Vous n etes plus dependant d une moyenne optimiste unique et vous mesurez la robustesse du revenu dans le temps.",
+        simBoxLabel: "Ce que montre le simulateur:",
+        simBoxText: "capital requis, plages probabilistes, scenarios prudents et sensibilite des hypotheses.",
+        stepsTitle: "Comment utiliser ce guide avec le simulateur",
+        steps: [
+          "Definir votre objectif net mensuel.",
+          "Entrer des hypotheses prudentes de rendement et croissance.",
+          "Regler la fiscalite selon le pays selectionne.",
+          "Comparer scenario prudent, central et favorable.",
+          "Mettre a jour le plan quand marche ou fiscalite changent."
+        ],
+        faqTitle: "FAQ",
+        faq: [
+          {
+            q: "Quel capital faut-il pour vivre des dividendes?",
+            a: "Cela depend du revenu net mensuel vise et du rendement net realiste. Un rendement prudent plus bas exige plus de capital."
+          },
+          {
+            q: "Un seul chiffre peut-il convenir a tous les pays?",
+            a: "Non. Residence fiscale, structure de compte et traitement des dividendes differents changent le net final."
+          },
+          {
+            q: "Le simulateur remplace-t-il un conseil fiscal?",
+            a: "Non. C est un outil de planification. La validation fiscale doit etre faite avec un professionnel local qualifie."
+          },
+          {
+            q: "Pourquoi cette page est performante en SEO?",
+            a: "Elle repond directement a l intention de recherche principale, couvre les pays les plus recherches et conduit vers le simulateur avec un contenu utile."
+          }
+        ],
+        ctaMain: "Ouvrir le simulateur dividendes",
+        ctaSecondary: "Voir les resultats du simulateur",
+        footer: "Contenu educatif uniquement. Pas un conseil financier ou fiscal."
+      }
+    };
+
+    const countryOrder = ["it", "fr", "es", "ch", "us", "uk", "ca"];
+
+    function fillList(el, items) {
+      el.innerHTML = items.map(item => `<li>${item}</li>`).join("");
+    }
+
+    function renderKickers(items) {
+      const grid = document.getElementById("kickerGrid");
+      grid.innerHTML = items
+        .map(item => `<div class="kicker"><strong>${item.title}</strong><p>${item.text}</p></div>`)
+        .join("");
+    }
+
+    function renderCountries(t) {
+      const grid = document.getElementById("countryGrid");
+      grid.innerHTML = countryOrder
+        .map(code => {
+          const data = t.countries[code];
+          const bullets = data.bullets.map(item => `<li>${item}</li>`).join("");
+          return `<section class="country-card" data-country="${code}"><h3>${data.name}</h3><p>${data.text}</p><ul>${bullets}</ul></section>`;
+        })
+        .join("");
+    }
+
+    function renderFaq(items) {
+      const faqList = document.getElementById("faqList");
+      faqList.innerHTML = items
+        .map(item => `<article class="faq-item"><h3>${item.q}</h3><p>${item.a}</p></article>`)
+        .join("");
+    }
+
+    function applyCountry(country) {
+      const cards = Array.from(document.querySelectorAll(".country-card"));
+      cards.forEach(card => {
+        const show = country === "all" || card.dataset.country === country;
+        card.classList.toggle("hidden", !show);
+        card.classList.toggle("active", show && country !== "all");
+      });
+    }
+
+    function fillCountryOptions(options, selectedValue) {
+      countrySelect.innerHTML = options
+        .map(opt => `<option value="${opt.value}" ${opt.value === selectedValue ? "selected" : ""}>${opt.label}</option>`)
+        .join("");
+    }
+
+    function applyLanguage(langCode) {
+      const t = i18n[langCode] || i18n.it;
+      const selectedCountry = countrySelect.value || "all";
+
+      document.documentElement.lang = t.htmlLang;
+      document.title = t.pageTitle;
+      descMeta.setAttribute("content", t.metaDescription);
+
+      document.getElementById("eyebrow").textContent = t.eyebrow;
+      document.getElementById("countryLabel").textContent = t.countryLabel;
+      document.getElementById("langLabel").textContent = t.langLabel;
+      document.getElementById("title").textContent = t.title;
+      document.getElementById("sub").textContent = t.sub;
+      document.getElementById("lead").textContent = t.lead;
+
+      renderKickers(t.kickers);
+
+      document.getElementById("formulaTitle").textContent = t.formulaTitle;
+      document.getElementById("formulaCopy").textContent = t.formulaCopy;
+      document.getElementById("formulaBox").textContent = t.formulaBox;
+      document.getElementById("formulaExample").textContent = t.formulaExample;
+
+      document.getElementById("strategyTitle").textContent = t.strategyTitle;
+      fillList(document.getElementById("strategyList"), t.strategy);
+      document.getElementById("note").textContent = t.note;
+
+      document.getElementById("countryTitle").textContent = t.countryTitle;
+      document.getElementById("countryCopy").textContent = t.countryCopy;
+      renderCountries(t);
+
+      document.getElementById("simTitle").textContent = t.simTitle;
+      document.getElementById("simCopy").textContent = t.simCopy;
+      document.getElementById("simExtra").textContent = t.simExtra;
+      document.getElementById("simBoxLabel").textContent = t.simBoxLabel;
+      document.getElementById("simBoxText").textContent = t.simBoxText;
+
+      document.getElementById("stepsTitle").textContent = t.stepsTitle;
+      fillList(document.getElementById("stepsList"), t.steps);
+
+      document.getElementById("faqTitle").textContent = t.faqTitle;
+      renderFaq(t.faq);
+
+      document.getElementById("ctaMain").textContent = t.ctaMain;
+      document.getElementById("ctaSecondary").textContent = t.ctaSecondary;
+      document.getElementById("footerText").textContent = t.footer;
+
+      fillCountryOptions(t.countryOptions, selectedCountry);
+      applyCountry(selectedCountry);
+    }
+
+    countrySelect.addEventListener("change", event => {
+      applyCountry(event.target.value);
+    });
+
+    langSelect.addEventListener("change", event => {
+      applyLanguage(event.target.value);
+    });
+
+    langSelect.value = "en";
+    applyLanguage("en");
+    countrySelect.value = "all";
+    applyCountry("all");
+  </script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Come vivere di dividendi in modo realistico, con simulatore Monte Carlo",
+    "description": "Guida SEO su come vivere di dividendi in Italia, Francia, Spagna, Svizzera, USA, UK e Canada, con formula pratica e uso del simulatore Monte Carlo.",
+    "inLanguage": "it",
+    "mainEntityOfPage": "https://385sam.github.io/dividend-simulator/dividend-income-capital.html"
+  }
+  </script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Quanto capitale serve per vivere di dividendi?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Dipende dal reddito netto mensile che vuoi coprire e dal rendimento netto realistico del portafoglio."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Posso usare un solo numero per tutti i paesi?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. La residenza fiscale, la struttura del conto e il trattamento dei dividendi cambiano il risultato finale."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Il simulatore sostituisce la consulenza fiscale?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. Il simulatore serve per la pianificazione e per avere una stima concreta, ma le verifiche fiscali vanno fatte con un professionista qualificato."
+        }
+      }
+    ]
+  }
+  </script>
+</body>
+</html>
